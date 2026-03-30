@@ -1,3 +1,12 @@
+---
+description: {{WORKFLOW_DESCRIPTION}}
+---
+<!--
+  Replace {{WORKFLOW_DESCRIPTION}} with a one-line description of this workflow.
+  Example: "Mobile Feature Development Workflow"
+  Example: "Backend Service Feature Workflow"
+-->
+
 # Workflow: {{DOMAIN_NAME}} Feature
 
 <!--
@@ -13,7 +22,7 @@
   3. Cross-cutting patterns — things that apply across task types
   4. "Done when" — explicit verification
 
-  Keep this file in sync with agent-[domain].md Process section.
+  Keep this file in sync with agent-DOMAIN.md Process section.
   If the order changes here, change it there too.
 -->
 
