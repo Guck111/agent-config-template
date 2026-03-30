@@ -11,7 +11,7 @@
 #   /path/to/agent-config-template/adapters/antigravity/convert.sh --source /path/to/content
 #   /path/to/agent-config-template/adapters/antigravity/convert.sh --project myapp
 #
-# Antigravity docs: https://docs.google.com/document/d/e/antigravity
+# Antigravity docs: https://github.com/google/antigravity
 
 set -euo pipefail
 
