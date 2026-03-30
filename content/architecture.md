@@ -93,11 +93,7 @@ trigger: always_on
 <!--
   The persistence model, if it has architectural constraints.
   Example: atomic writes, offline-first requirements, RPC patterns.
--->
 
-{{PERSISTENCE_RULES}}
-
-<!--
   Example:
   All inserts go through a single Postgres function:
     insert_article_with_variants(p_article JSONB, p_variants JSONB) RETURNS UUID
@@ -106,6 +102,31 @@ trigger: always_on
   If the RPC itself fails, Postgres rolls back the entire transaction.
   No orphaned rows.
 -->
+
+{{PERSISTENCE_RULES}}
+
+## {{MODES_OR_VARIANTS_SECTION_NAME}}
+
+<!--
+  OPTIONAL — delete this section if not applicable.
+
+  Use when the system has distinct operating modes, job types, or
+  entry points that all produce the same output shape.
+  Example: a pipeline with Generate / Import / User Upload modes.
+
+  If your persistence section covers everything, remove this section.
+
+  Example:
+  The pipeline always produces the same output: 1 article + N variants.
+  The input source determines the mode.
+
+  | Mode     | Command                        | Output                |
+  |----------|--------------------------------|-----------------------|
+  | Generate | pnpm pipeline generate ...     | 1 article + 1 variant |
+  | Import   | pnpm pipeline import --url ... | 1 article + 6 variants |
+-->
+
+{{MODES_DESCRIPTION}}
 
 ## Restrictions for AI Agent
 
