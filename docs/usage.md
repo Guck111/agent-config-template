@@ -200,6 +200,11 @@ This installs real, filled-in files — no placeholders. Good for:
 - Testing that the installer works on your machine
 - Using as a reference while filling in your own project
 
+**Note:** `context/research.md` in the Eargrade example contains
+Eargrade-specific product context (competitors, audience, CEFR notes).
+If you install it into your own project, replace or delete that file —
+it's background knowledge about Eargrade, not a reusable pattern.
+
 ---
 
 ## Maintaining the config over time
