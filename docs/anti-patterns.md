@@ -172,7 +172,7 @@ it just loads with corrupted instructions.
 One frontmatter block, at the top. Run:
 
 ```bash
-grep -n "trigger:" .agents/rules/*.md
+grep -n "trigger:" .claude/agents/*.md
 ```
 
 Any match below line 5 is a content leak. Delete those lines.
@@ -214,7 +214,7 @@ and carplay constraints during Gemini API work.
 **The fix:**
 
 Split by domain. `role.md` (always_on) holds only universal principles:
-philosophy, critical rules, communication style. `agent-[domain].md` uses
+philosophy, critical rules, communication style. `agent-DOMAIN.md` uses
 glob triggers to activate only when editing files in that domain:
 
 ```yaml
@@ -224,7 +224,7 @@ globs: packages/pipeline/**
 ---
 ```
 
-One file per major domain. See `content/agent-[domain].md`.
+One file per major domain. See `content/agent-DOMAIN.md`.
 
 ---
 
