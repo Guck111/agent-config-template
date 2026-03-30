@@ -17,9 +17,11 @@ pnpm knip --no-config-hints                                          # dead code
 
 ## Agent context
 
-@.agents/rules/role.md
-@.agents/rules/instructions.md
-@.agents/rules/architecture.md
-@.agents/rules/skills.md
-@.agents/workflows/content-pipeline.md
-@.agents/context/reference.md
+@.claude/agents/role.md
+@.claude/agents/instructions.md
+@.claude/agents/architecture.md
+@.claude/agents/skills.md
+@.claude/agents/agent-pipeline.md
+@.claude/agents/agent-mobile.md
+@.claude/agents/workflows/mobile-feature.md
+@.claude/context/reference.md
