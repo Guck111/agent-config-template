@@ -58,7 +58,7 @@ your-project/
       instructions.md
       architecture.md
       skills.md
-      agent-[domain].md
+      agent-DOMAIN.md
       workflows/
         feature-workflow.md
     context/
@@ -103,8 +103,8 @@ what to put there and show an Eargrade example.
    - Each needs a trigger, correct code, and ideally a wrong-code example
    - Leave the `# ADDING SKILLS OVER TIME` comment — it's a reminder
 
-**5. `agent-[domain].md`** — one per major domain (e.g. `agent-backend.md`, `agent-frontend.md`).
-   - Rename from `agent-[domain].md` to your actual domain name
+**5. `agent-DOMAIN.md`** — one per major domain (e.g. `agent-backend.md`, `agent-frontend.md`).
+   - Rename from `agent-DOMAIN.md` to your actual domain name
    - Set the `globs:` frontmatter to the path that triggers this agent
    - Write identity grounded in real project history
 
@@ -137,11 +137,7 @@ Ask something domain-specific and check if the agent responds with your
 philosophy and rules in mind. If it doesn't know something it should —
 that section probably still has placeholders.
 
----
-
-## Scenario 2: Existing project
-
-You already have an agent config (CLAUDE.md, .agents/rules/, or similar).
+You already have an agent config (CLAUDE.md, `.claude/agents/`, or similar).
 Before migrating, run the audit checklist to understand what needs fixing:
 
 ```bash
@@ -160,7 +156,7 @@ Then decide: **migrate** (start fresh from the template) or **fix in place**
 cd ~/projects/existing-project
 
 # Back up your current config first
-cp -r .agents/ .agents.bak/
+cp -r .claude/agents/ .claude/agents.bak/
 cp CLAUDE.md CLAUDE.md.bak
 
 # Install the template
@@ -179,7 +175,7 @@ grep -n "trigger:" .claude/agents/*.md
 # Delete any "trigger:" lines that appear outside the frontmatter block (lines > 5)
 
 # Check for duplication (Point 1)
-grep -rl "supabase" .claude/agents/   # example: check for a fact in multiple files
+grep -rl "{{YOUR_KEY_TERM}}" .claude/agents/   # pick any fact that might be duplicated
 ```
 
 ---
@@ -276,7 +272,7 @@ agent-config-template/
     instructions.md         ← general dev rules
     architecture.md         ← system boundaries and constraints
     skills.md               ← when X → do Y patterns
-    agent-[domain].md       ← domain-specific agent (one per domain)
+    agent-DOMAIN.md       ← domain-specific agent (one per domain)
     workflows/
       feature-workflow.md   ← step-by-step workflow by task type
     context/
