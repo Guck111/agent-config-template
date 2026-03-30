@@ -117,9 +117,14 @@ what to put there and show an Eargrade example.
    - Env vars, DB schema, API shapes, key commands
    - Only facts. No rules here.
 
-**8. `CLAUDE.md`** — already generated with `@`-imports. Just add:
-   - One-line project description
-   - Your most-used commands
+**8. `CLAUDE.md`** — use `content/CLAUDE.md` as the template.
+   The installer generates this file automatically, but `content/CLAUDE.md`
+   shows the expected structure with placeholders if you prefer to write it manually.
+   Fill in:
+   - `{{PROJECT_NAME}}` — project name
+   - `{{PROJECT_DESCRIPTION}}` — one sentence describing the project
+   - `{{COMMAND_N}}` — your most-used commands (3–5 is enough)
+   - `@`-imports — the installer fills these in; add any extra files manually
 
 **Tip:** `examples/eargrade/` shows every file fully filled in.
 Open the template and the example side by side.
@@ -268,11 +273,12 @@ agent-config-template/
   install.sh                ← run this from your project root
 
   content/                  ← fill these in for your project
+    CLAUDE.md               ← thin index template (installer generates this)
     role.md                 ← philosophy, rules, success criteria
     instructions.md         ← general dev rules
     architecture.md         ← system boundaries and constraints
     skills.md               ← when X → do Y patterns
-    agent-DOMAIN.md       ← domain-specific agent (one per domain)
+    agent-DOMAIN.md         ← domain-specific agent (one per domain)
     workflows/
       feature-workflow.md   ← step-by-step workflow by task type
     context/
