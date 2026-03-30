@@ -35,7 +35,7 @@ Any `❌` is a fix before the next session. Any `⚠️` is a fix before the nex
 
 ```bash
 # Example: check if "supabase" appears in more than one rules file
-grep -rl "supabase" .agents/rules/
+grep -rl "supabase" .claude/agents/
 ```
 
 **Failure signals:**
@@ -118,7 +118,7 @@ repeated mistakes — run skill-workshop to find them (see Point 8).
 
 **How to check:**
 ```bash
-grep -n "trigger:" .agents/rules/*.md
+grep -n "trigger:" .claude/agents/*.md
 ```
 
 Look at the line numbers. Frontmatter `trigger:` should be in lines 1–5.
@@ -143,10 +143,6 @@ or confuse the actual frontmatter metadata.
 
 **Fix:** Delete any lines after the closing `---` that repeat frontmatter keys.
 One frontmatter block, at the top, nothing repeated below.
-
----
-
-## Point 5 — There is a workflow file for each major development domain
 
 **Question:** For every major task type in the project, is there a workflow
 that tells the agent what order to do things in?
@@ -282,9 +278,9 @@ holding 40 rules treats each as one of forty.
 
 **Fix:** Split into:
 - `role.md` (always_on) — universal principles only: philosophy, critical rules, communication style
-- `agent-[domain].md` (glob: `path/to/domain/**`) — domain identity, process, patterns, success criteria
+- `agent-DOMAIN.md` (glob: `path/to/domain/**`) — domain identity, process, patterns, success criteria
 
-Use the `content/agent-[domain].md` template. One file per major domain.
+Use the `content/agent-DOMAIN.md` template. One file per major domain.
 
 ---
 
