@@ -102,11 +102,24 @@ cd ~/projects/some-project
 When improving them, check two things:
 
 1. Does `examples/eargrade/` still reflect the template structure?
-   If you add a new section to `content/role.md`, add the filled-in
-   version to `examples/eargrade/role.md`.
+   Every file in `content/` has a counterpart in `examples/eargrade/`.
+   If you add or rename a section in a template file, update the filled-in
+   version too. The mapping is 1:1:
+
+   | Template | Example |
+   |---|---|
+   | `content/CLAUDE.md` | `examples/eargrade/CLAUDE.md` |
+   | `content/role.md` | `examples/eargrade/role.md` |
+   | `content/instructions.md` | `examples/eargrade/instructions.md` |
+   | `content/architecture.md` | `examples/eargrade/architecture.md` |
+   | `content/skills.md` | `examples/eargrade/skills.md` |
+   | `content/agent-DOMAIN.md` | `examples/eargrade/agent-pipeline.md` (and `agent-mobile.md`) |
+   | `content/workflows/feature-workflow.md` | `examples/eargrade/workflows/mobile-feature.md` |
+   | `content/context/reference.md` | `examples/eargrade/context/reference.md` |
 
 2. Does `docs/usage.md` still accurately describe the fill-in process?
-   If you add a new file to `content/`, add it to the Step 2 list in usage.md.
+   If you add a new file to `content/`, add it to the Step 2 list
+   and the File layout section in `docs/usage.md`.
 
 ---
 
