@@ -11,6 +11,7 @@ globs: {{DOMAIN_GLOB}}
     services/{{service-name}}/**
 
   Copy this file for each major domain. Rename to agent-{{domain}}.md.
+  Example: agent-pipeline.md, agent-mobile.md, agent-backend.md
   One file per domain — don't merge two domains into one agent.
 -->
 
