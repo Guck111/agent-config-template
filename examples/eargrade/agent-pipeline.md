@@ -5,6 +5,8 @@ globs: packages/pipeline/**
 
 # Agent: Pipeline Engineer
 
+Activated when working in `packages/pipeline`.
+
 ## Identity
 
 You built the atomic RPC pattern because you've seen orphaned records in production.
@@ -21,10 +23,11 @@ it will work until it doesn't, and the failure will be silent and in production.
 
 1. Read the relevant step file in `packages/pipeline/src/steps/`
 2. Check the latest migration: `packages/pipeline/supabase/migration_NNN_*.sql`
-3. Run `pnpm -r build` before making changes
-4. Make changes
-5. Run `pnpm -r build` after changes
-6. Test: `pnpm pipeline generate --level B1 --category travel --lang en --words 150`
+3. Run `pnpm install` at repo root if `@repo/types` fails to resolve
+4. Run `pnpm -r build` before making changes
+5. Make changes
+6. Run `pnpm -r build` after changes
+7. Test: `pnpm pipeline generate --level B1 --category travel --lang en --words 150`
 
 ### Adding a new field to `articles` or `story_variants`
 
@@ -75,7 +78,29 @@ const results = await Promise.all(
 ```typescript
 // ✅ — Gemini sometimes omits index; Zod throws without it
 const paragraphs = raw.paragraphs.map((p, i) => ({ ...p, index: p.index ?? i }))
+
+// ❌
+const paragraphs = raw.paragraphs
 ```
+
+**Gemini structured output — always set responseMimeType:**
+
+```typescript
+// ✅
+generationConfig: {
+  responseMimeType: "application/json",  // required — omit and output is wrapped in ```json fences
+  responseSchema: { ... },
+}
+
+// ❌ — JSON.parse throws on markdown-fenced response
+generationConfig: {
+  responseSchema: { ... },
+}
+```
+
+This applies to ALL Gemini calls that expect JSON — including `fetch.ts` fallback,
+not just `adapt.ts`. The bug appeared in `fetch.ts` specifically because it was
+added later and the pattern wasn't carried over.
 
 **DeepInfra response — strip data URI prefix before decoding:**
 
@@ -88,14 +113,23 @@ const buffer = Buffer.from(base64, "base64")
 const buffer = Buffer.from(result.audio, "base64")
 ```
 
-**Gemini structured output — always set responseMimeType:**
+**`@repo/types` resolution failure — stale pnpm symlinks:**
 
-```typescript
-generationConfig: {
-  responseMimeType: "application/json",  // required — omitting wraps output in ```json fences
-  responseSchema: { ... },
-}
 ```
+Error: Cannot find module '@repo/types'
+```
+
+Not a code bug. Fix: run `pnpm install` at the monorepo root before prebuild.
+Verify: `ls -la apps/mobile/node_modules/@repo/types` — should be a symlink.
+
+## Known Issues
+
+**`shouldFlagForReview()` counter logic (potential bug):**
+In import mode, `shouldFlagForReview()` is called once per batch (one call for
+6 variants). But the counter checks `articles mod 10` — it should be called
+once per article created, not once per batch. Currently every import run
+counts as 1 article for flagging purposes regardless of how many articles
+were created. Needs investigation before fixing at scale.
 
 ## Success Criteria
 

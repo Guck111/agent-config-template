@@ -142,7 +142,10 @@ the agent reads as an instruction. Depending on placement, it can override
 or confuse the actual frontmatter metadata.
 
 **Fix:** Delete any lines after the closing `---` that repeat frontmatter keys.
-One frontmatter block, at the top, nothing repeated below.
+One frontmatter block, at the top, nothing repeated below.][]
+---
+
+## Point 5 — There is a workflow file for each major development domain
 
 **Question:** For every major task type in the project, is there a workflow
 that tells the agent what order to do things in?
@@ -222,58 +225,49 @@ a "when X → do Y" pattern. `context/reference.md` for API contracts and schema
 
 ## Point 8 — skill-workshop has been run on accumulated sessions
 
-**Question:** Have repeated agent mistakes from real sessions been documented as skills?
+**Question:** Have repeated agent mistakes been turned into skills?
 
 **How to check:**
-- Count your sessions since the last skill-workshop run.
-- If it's more than ~10 sessions, you have uncaptured patterns.
-- Think of 2–3 mistakes the agent made more than once. Are they in `skills.md`?
+Think about the last 10 sessions. Did the agent repeat the same mistake
+more than once? If yes, that mistake is not in `skills.md`.
 
 **How to run skill-workshop:**
 ```bash
-# Install
+# Install once
 git clone https://github.com/grayodesa/skill-workshop ~/.skill-workshop
-
-# Copy agents to your Claude Code setup
 cp ~/.skill-workshop/agents/* ~/.claude/agents/
 cp -r ~/.skill-workshop/skills/* ~/.claude/skills/
 
-# Run in Claude Code (in your project directory)
+# Run in Claude Code from your project directory
 /skill-workshop
-# or target a specific project
-/skill-workshop /path/to/project
 ```
 
-**What it finds:** Patterns with a score and session count.
-Score 60+ with 2+ sessions = strong skill candidate.
-Review the candidates, approve the ones that match real recurring problems.
+Review candidates with score 60+ across 2+ sessions. Add approved ones to `skills.md`.
 
-**What goes wrong without it:** Repeated mistakes stay undocumented.
-The agent fixes the same bug in session 3, session 7, and session 12.
-Each fix costs context and time. None of them survives to the next session.
+**Failure signals:**
+- `skills.md` has never been updated since the project started
+- The same gotcha has been corrected in 3+ sessions
 
-**Fix:** Run skill-workshop, review candidates, add approved patterns to `skills.md`
-using the "when X → do Y" format.
+**What goes wrong:** Every session, the agent relearns the same lesson.
+The institutional memory stays in chat logs, not in config files.
+
+**Fix:** Run skill-workshop after every significant project phase.
+Score 60+ with 2+ sessions → add to `skills.md`. Score below 60 → monitor.
 
 ---
 
-## Point 9 — Specialised agents use glob triggers, not always-on
+## Point 9 — Specialised agents with glob triggers, not one monolithic always-on agent
 
-**Question:** Is the agent carrying context that's irrelevant to the current task?
+**Question:** Is there a separate agent file for each major development domain?
 
 **How to check:**
-Count how many rules in your always-on files are domain-specific
-(apply only to pipeline tasks, or only to mobile tasks, but not both).
-If more than 30% of always-on content is domain-specific, specialisation is overdue.
+List your project's major domains (e.g. mobile, pipeline, backend).
+Check whether each has its own `agent-DOMAIN.md` with a `globs:` trigger.
 
 **Failure signals:**
-- One `role.md` with `trigger: always_on` that contains pipeline-specific rules
-  AND mobile-specific rules AND database-specific rules
-- Agent mentions pipeline gotchas when working on a UI component
-- Agent mentions mobile patterns when writing a migration
-
-**What goes wrong:** Irrelevant context on every task. More tokens, more noise,
-higher hallucination risk. Domain-specific rules diluted by volume — an agent
+- A single `role.md` with `trigger: always_on` covers all project domains
+- Pipeline rules are active when editing mobile files and vice versa
+- Domain-specific rules diluted by volume — an agent
 holding 40 rules treats each as one of forty.
 
 **Fix:** Split into:

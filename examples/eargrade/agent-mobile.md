@@ -12,66 +12,87 @@ logic to the mobile app — fetching from an AI API directly, adapting content
 on-device, calling synthesis in the background — the answer is no.
 Not because it's hard, but because the architecture doesn't allow it.
 
-You introduced `observer()` wrappers as the standard because Legend-State
-state changes were silently not re-rendering screens. You enforce the store
+You introduced `npx expo install` as the only allowed way to add native
+packages after `pnpm add react-native-screens` broke the native build
+by pulling `react-native@0.79` instead of `0.76`. You enforce the store
 action pattern because direct Supabase writes from components break offline mode.
 
 ## Process
 
-### UI-only feature (new screen, new component, visual change)
+### New screen
 
 1. Check if a shared component in `src/components/` already covers the need
-2. Create or update the component using `createStyleSheet` + `useStyles`
-3. Wrap in `observer()` if the component reads from the store
-4. Register in navigator if it's a new screen
+2. Create file in `apps/mobile/app/` (file name = route segment)
+3. Style with `createStyleSheet` + `useStyles` — no inline styles, no hardcoded values
+4. Wrap in `observer()` if the component reads from the store
 5. `pnpm -r build` → verify on simulator in light + dark theme
 
-### Data feature (reads new data, adds store action)
+### New data feature
 
 1. Confirm the Supabase table has RLS enabled and a SELECT policy for the user
-2. Add or update the Zod schema in `packages/types/src/story.ts`
+2. Add or update Zod schema in `packages/types/src/story.ts`
 3. `pnpm -r build` to propagate the type
-4. Add a store action in `src/store/` — query there, not in the component
-5. Connect the component via `observer()` + `.get()`
-6. `pnpm -r build` → test on simulator
+4. Add store action in `src/store/` — query there, not in the component
+5. Connect component via `observer()` + `.get()`
+6. Verify offline: kill network, data should still render from Legend-State
 
-### Audio feature (TrackPlayer, alignment, transcript)
+### New DB field consumed in mobile
 
-1. All TrackPlayer calls go through `ensureSetup()` first
-2. Playback logic in `useAudioPlayer.ts` — not in screen components
-3. Word highlighting: advance a pointer through `alignment[]`, don't `findIndex` on every frame
-4. CarPlay: `CPListTemplate` and `CPNowPlayingTemplate` only
-5. `pnpm -r build` → test on device or Xcode simulator (not just Metro)
+1. Confirm type is already in `packages/types` (pipeline adds fields, not mobile)
+2. `pnpm -r build` to get the updated type
+3. Update store query + Zod parse
+4. Update component
 
-## Patterns
+### iOS native build
 
-**Store action — never query Supabase from a component:**
+1. Commit or stash all pending changes
+2. `pnpm expo prebuild --platform ios --clean`
+3. Resolve any pod install errors — check Podfile.lock for version conflicts
+4. `pnpm expo run:ios`
 
-```typescript
-// ✅ — component calls the store action
-const { fetchArticles } = useArticleActions()
-useEffect(() => { fetchArticles() }, [])
-
-// ❌ — direct query in component, breaks offline mode
-useEffect(() => {
-  supabase.from("story_variants").select("*").then(({ data }) => setVariants(data))
-}, [])
-```
-
-**Adding a native dependency:**
-
-```bash
-# ✅ — Expo resolves the correct version for SDK 52
-npx expo install <package-name>
-
-# ❌ — may pull incompatible react-native version
-pnpm add <package-name>
-```
-
-After any native install, verify `react-native` version:
+If the build fails after a native package install — check `react-native` version:
 ```bash
 cat apps/mobile/node_modules/react-native/package.json | grep '"version"'
 # Expected: 0.76.x — if 0.79.x, find what pulled it and reset
+```
+
+## Patterns
+
+**Styling:**
+```typescript
+// ✅
+const { styles, theme } = useStyles(stylesheet)
+const stylesheet = createStyleSheet((theme) => ({
+  container: { padding: theme.spacing.m, backgroundColor: theme.colors.surface },
+}))
+
+// ❌
+<View style={{ padding: 16, backgroundColor: "#1C1C1E" }} />
+```
+
+**Store — write order:**
+```typescript
+// ✅ Legend-State first, Supabase syncs later
+articlesStore.progress[variantId].set({ position, updatedAt: Date.now() })
+
+// ❌ Direct Supabase from UI — breaks offline mode
+await supabase.from("listening_progress").upsert(...)
+```
+
+**Reactive component:**
+```typescript
+const MyScreen = observer(() => {
+  const items = articlesStore.list.get()
+})
+```
+
+**Installing packages:**
+```bash
+# Anything with native code or in the Expo ecosystem
+npx expo install expo-secure-store react-native-track-player
+
+# Pure JS only (no native bindings)
+pnpm add zod @legendapp/state
 ```
 
 ## Success Criteria

@@ -19,7 +19,7 @@ You need one of the supported tools installed:
 Clone this template somewhere on your machine (not inside your project):
 
 ```bash
-git clone https://github.com/arseni/agent-config-template.git ~/agent-config-template
+git clone https://github.com/guck111/agent-config-template.git ~/agent-config-template
 ```
 
 ---
@@ -63,7 +63,7 @@ your-project/
         feature-workflow.md
     context/
       reference.md
-  CLAUDE.md              ← thin index with @-imports
+  CLAUDE.md              ← thin index with @-imports (auto-generated)
 ```
 
 For Antigravity, it creates skill directories in:
@@ -103,28 +103,37 @@ what to put there and show an Eargrade example.
    - Each needs a trigger, correct code, and ideally a wrong-code example
    - Leave the `# ADDING SKILLS OVER TIME` comment — it's a reminder
 
-**5. `agent-DOMAIN.md`** — one per major domain (e.g. `agent-backend.md`, `agent-frontend.md`).
-   - Rename from `agent-DOMAIN.md` to your actual domain name
+**5. `agent-DOMAIN.md`** — one copy per major domain (e.g. `agent-backend.md`, `agent-frontend.md`).
+   - **Copy** `agent-DOMAIN.md` for each domain — don't rename the original, copy it.
+     Example: `cp agent-DOMAIN.md agent-pipeline.md && cp agent-DOMAIN.md agent-mobile.md`
    - Set the `globs:` frontmatter to the path that triggers this agent
    - Write identity grounded in real project history
 
-**6. `workflows/feature-workflow.md`** — rename to match your domain.
-   - Identify your 2–3 task types
+   **How many domains do you need?**
+   One domain = one major top-level directory with distinct task types and gotchas.
+   A mobile app and a backend pipeline are two domains. Two backend microservices
+   with the same patterns are one domain. If you're unsure, start with one and
+   split when you notice the agent carrying irrelevant context.
+
+**6. `workflows/feature-workflow.md`** — one copy per domain, renamed to match.
+   - **Copy** the file for each domain: `mobile-feature.md`, `pipeline-feature.md`, etc.
+   - Identify your 2–3 task types per domain
    - Write the exact step order for each
-   - Add "Done when" criteria
+   - Add "Done when" criteria — runnable commands, not vague descriptions
 
 **7. `context/reference.md`** — facts the agent needs to look up.
    - Env vars, DB schema, API shapes, key commands
    - Only facts. No rules here.
 
-**8. `CLAUDE.md`** — use `content/CLAUDE.md` as the template.
-   The installer generates this file automatically, but `content/CLAUDE.md`
-   shows the expected structure with placeholders if you prefer to write it manually.
-   Fill in:
+**8. `CLAUDE.md`** — the installer generates this file automatically from the list
+   of files it just created. It is a thin index of `@`-imports with placeholders
+   for your project name and key commands. Fill in:
    - `{{PROJECT_NAME}}` — project name
-   - `{{PROJECT_DESCRIPTION}}` — one sentence describing the project
-   - `{{COMMAND_N}}` — your most-used commands (3–5 is enough)
-   - `@`-imports — the installer fills these in; add any extra files manually
+   - The commands block — your 3–5 most-used commands
+   - The `@`-imports are already filled in by the installer; add any extra files manually
+
+   If you prefer to write CLAUDE.md manually instead, use `content/CLAUDE.md`
+   as the reference template.
 
 **Tip:** `examples/eargrade/` shows every file fully filled in.
 Open the template and the example side by side.
@@ -141,6 +150,10 @@ claude
 Ask something domain-specific and check if the agent responds with your
 philosophy and rules in mind. If it doesn't know something it should —
 that section probably still has placeholders.
+
+---
+
+## Scenario 2: Existing project
 
 You already have an agent config (CLAUDE.md, `.claude/agents/`, or similar).
 Before migrating, run the audit checklist to understand what needs fixing:
@@ -276,16 +289,17 @@ The installer backs up `.claude/agents/` before overwriting, so nothing is lost.
 ```
 agent-config-template/
   install.sh                ← run this from your project root
+  validate.sh               ← check for unfilled {{PLACEHOLDER}} values
 
   content/                  ← fill these in for your project
-    CLAUDE.md               ← thin index template (installer generates this)
+    CLAUDE.md               ← thin index reference (installer auto-generates yours)
     role.md                 ← philosophy, rules, success criteria
     instructions.md         ← general dev rules
     architecture.md         ← system boundaries and constraints
     skills.md               ← when X → do Y patterns
-    agent-DOMAIN.md         ← domain-specific agent (one per domain)
+    agent-DOMAIN.md         ← domain agent template (copy once per domain)
     workflows/
-      feature-workflow.md   ← step-by-step workflow by task type
+      feature-workflow.md   ← workflow template (copy once per domain)
     context/
       reference.md          ← API contracts, schema, commands
 

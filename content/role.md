@@ -38,9 +38,9 @@ trigger: always_on
   Rules that, if broken, cause hard-to-debug failures — wrong library versions,
   orphaned DB records, exposed secrets, silent data loss.
 
-  Format for each rule — TWO sentences:
-  - Sentence 1: **NEVER/ALWAYS** {{what to do or not do}}.
-  - Sentence 2: {{concrete failure mode — what actually broke, when, how}}.
+  Format for each rule — TWO sentences on separate lines:
+  - Line 1: **NEVER/ALWAYS** {{what to do or not do}}.
+  - Line 2: {{concrete failure mode — what actually broke, when, how}}.
 
   The second sentence is not optional. It's what prevents the agent from
   treating the rule as negotiable when it thinks it found a good exception.
@@ -54,24 +54,32 @@ trigger: always_on
   Aim for 5–8 rules. More than 10 dilutes attention.
 -->
 
-- **NEVER** {{RULE_1_WHAT}}. {{RULE_1_WHY_CONCRETE_FAILURE}}.
-  <!-- Example: "NEVER call `persistArticle` and `persistVariant` separately —
-       always `persistArticleWithVariants`. Separate calls leave orphaned article
-       rows with no variants on any failure between them." -->
+- **NEVER** {{RULE_1_WHAT}}.
+  {{RULE_1_WHY_CONCRETE_FAILURE}}.
+  <!-- Example:
+    **NEVER** call `persistArticle` and `persistVariant` separately — always `persistArticleWithVariants`.
+    Separate calls leave orphaned article rows with no variants on any failure between them.
+  -->
 
-- **NEVER** {{RULE_2_WHAT}}. {{RULE_2_WHY_CONCRETE_FAILURE}}.
-  <!-- Example: "NEVER use `pnpm add` for native packages in `apps/mobile` —
-       use `npx expo install`. pnpm resolves versions independently of Expo's
-       compatibility matrix: it pulled react-native@0.79 instead of 0.76 and
-       broke the native build silently." -->
+- **NEVER** {{RULE_2_WHAT}}.
+  {{RULE_2_WHY_CONCRETE_FAILURE}}.
+  <!-- Example:
+    **NEVER** use `pnpm add` for native packages in `apps/mobile` — use `npx expo install`.
+    pnpm resolves versions independently of Expo's compatibility matrix: it pulled react-native@0.79
+    instead of 0.76 and broke the native build silently — no error until Xcode, 20 minutes later.
+  -->
 
-- **NEVER** {{RULE_3_WHAT}}. {{RULE_3_WHY_CONCRETE_FAILURE}}.
+- **NEVER** {{RULE_3_WHAT}}.
+  {{RULE_3_WHY_CONCRETE_FAILURE}}.
 
-- **NEVER** {{RULE_4_WHAT}}. {{RULE_4_WHY_CONCRETE_FAILURE}}.
+- **NEVER** {{RULE_4_WHAT}}.
+  {{RULE_4_WHY_CONCRETE_FAILURE}}.
 
-- **ALWAYS** {{RULE_5_WHAT}}. {{RULE_5_WHY_CONCRETE_FAILURE}}.
+- **ALWAYS** {{RULE_5_WHAT}}.
+  {{RULE_5_WHY_CONCRETE_FAILURE}}.
 
-- **ALWAYS** {{RULE_6_WHAT}}. {{RULE_6_WHY_CONCRETE_FAILURE}}.
+- **ALWAYS** {{RULE_6_WHAT}}.
+  {{RULE_6_WHY_CONCRETE_FAILURE}}.
 
 ## Success Criteria
 

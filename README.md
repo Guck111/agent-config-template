@@ -1,7 +1,7 @@
 # agent-config-template
 
 A structured template for configuring AI coding agents on real projects.
-Born from auditing and rebuilding the agent setup for [Eargrade](https://github.com/arseni/audio-english) —
+Born from auditing and rebuilding the agent setup for [Eargrade](https://github.com/guck111/audio-english) —
 an AI-first mobile language learning app.
 
 ## The problem this solves
@@ -68,7 +68,7 @@ install.sh                 ← interactive installer (detects installed tools)
 
 ## Quick start
 ```bash
-git clone https://github.com/arseni/agent-config-template.git
+git clone https://github.com/guck111/agent-config-template.git
 cd agent-config-template
 
 # Interactive install — detects Claude Code and Antigravity automatically
