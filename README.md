@@ -50,7 +50,7 @@ content/                   ← tool-agnostic source of truth
 
 adapters/                  ← converts content/ into tool-specific formats
   claude-code/
-    convert.sh             ← writes to .claude/agents/ and .claude/skills/
+    convert.sh             ← writes to .claude/agents/, .claude/context/ and CLAUDE.md
   antigravity/
     convert.sh             ← writes SKILL.md files for ~/.gemini/antigravity/
 
@@ -81,6 +81,20 @@ cd agent-config-template
 
 Then fill in the placeholders in `content/` for your project.
 See `examples/eargrade/` for a complete real-world example.
+
+## Using this with an AI agent
+
+You don't have to run the installer yourself. Open Claude Code (or Antigravity)
+in your project and point the agent at this repo:
+
+> Read github.com/guck111/agent-config-template and set up an agent config for
+> this project.
+
+The agent follows [`AGENTS.md`](AGENTS.md): it reads `content/` and
+`examples/eargrade/`, asks you about your stack, architectural boundaries,
+gotchas, and build/test commands, then writes the filled config
+(`.claude/agents/`, `.claude/context/`, and `CLAUDE.md`) directly — no manual
+copying. The `install.sh` path above still works; this is the alternative.
 
 ## Supported tools
 
